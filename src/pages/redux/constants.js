@@ -1,0 +1,7 @@
+
+export const LOGIN = "LOGIN";
+export const USER_DATA = "USER_DATA";
+export const COMMON_ERROR = "COMMON_ERROR"
+export const COMMON_SUCCESS = "COMMON_SUCCESS"
+export const COMMON_VALIDATION_ERROR = "COMMON_VALIDATION_ERROR"
+export const COMMON_REQUEST = "COMMON_REQUEST"

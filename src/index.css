@@ -1,13 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'PlusJakartaText';
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url('./fonts/PlusJakartaText-Light.otf');
+}
+
+@font-face {
+  font-family: 'PlusJakartaText';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/PlusJakartaText-Regular.otf');
+}
+
+@font-face {
+  font-family: 'PlusJakartaText';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/PlusJakartaText-Bold.otf');
+}
+
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: PlusJakartaText !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: PlusJakartaText;
+}
+
+img {
+  pointer-events: none;
 }
