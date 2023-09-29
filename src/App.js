@@ -1,3 +1,4 @@
+import './index.css';
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
@@ -15,45 +16,17 @@ const theme = createTheme({
     },
   },
   palette: {
-    mode: 'light',
-    secondary: {
-      light: '#757575',
-      main: '#2E2A40',
-      dark: '#0C0407',
-      contrastText: '#fff',
-    },
     primary: {
-      light: '#BBA0F3',
-      main: '#AE8EF1',
-      dark: '#7842E8',
-      contrastText: '#fff',
+      main: '#fff',
     },
-    error: {
-      light: '#FD7561',
-      main: '#FC372D',
-      dark: '#780828',
-      contrastText: '#fff',
+    secondary: {
+      main: '#607d8b',
     },
-    success: {
-      light: '#78E672',
-      main: '#46D64B',
-      dark: '#0D6630',
-      contrastText: '#fff',
+    background: {
+      default: '#fff',
+      paper: '#ffffff',
     },
-    info: {
-      light: '#6692FB',
-      main: '#3469F9',
-      dark: '#091B77',
-      contrastText: '#fff',
-    },
-    warning: {
-      light: '#FFCD3F',
-      main: '#FFB600',
-      dark: '#7A4800',
-      contrastText: '#fff',
-    }
-
-  }
+  },
 });
 
 function App() {

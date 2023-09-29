@@ -2,13 +2,15 @@ import { put, call, all, takeLatest } from 'redux-saga/effects';
 import { LOGIN } from './constants';
 import Cookies from 'js-cookie';
 import { login } from '../../services/auth.service';
-import { commonErrorAction, commonRequestAction, commonSuccessAction, commonValidationErrorAction } from './actions';
+import { commonErrorAction, commonRequestAction, commonSuccessAction, commonValidationErrorAction, userDataAction } from './actions';
 
 function* loginSaga({ body }) {
     try {
         const response = yield call(login, body);
         if (response.status === 200) {
             Cookies.set('token', response.data.user.token, { expires: 1 });
+            delete response.data.user.token
+            yield put(userDataAction(response.data.user))
             yield put(commonSuccessAction(response.data.message));
         }
         // Cookies.set('currentUser', JSON.stringify(response.user), { expires: 1 });

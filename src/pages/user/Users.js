@@ -1,27 +1,12 @@
-// src/components/Users.js
+import { Grid } from '@mui/material';
 import React from 'react';
-import { useUsers } from '../../react-query/user.query';
 
-const Users = () => {
-  const { data: users, isLoading, isError } = useUsers();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error fetching users</div>;
-  }
+const Users = (props) => {
 
   return (
-    <div>
+    <Grid className="ml-[320px] mt-[70px] w-full text-main_text">
       <h2>Users</h2>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.username}</li>
-        ))}
-      </ul>
-    </div>
+    </Grid>
   );
 };
 

@@ -7,6 +7,7 @@ const initialState = {
     common_validation_error: null,
     common_requesting: false,
     user: false,
+    isLogged: false,
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -46,6 +47,7 @@ const mainReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.data,
+                isLogged: action.data.username,
             };
         default:
             return state;

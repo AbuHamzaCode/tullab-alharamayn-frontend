@@ -1,47 +1,124 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { loginAction } from '../redux/actions';
+import { Grid, IconButton, InputAdornment } from '@mui/material';
+import tullab_icon from '../../assets/tullab-icon-text.jpg';
+import { Controller, useForm } from 'react-hook-form';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { CommonLoadingButton, CommonTextField } from '../../components/CommonComponents';
+import PasswordIcon from '@mui/icons-material/Password';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const Login = (props) => {
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-    });
+    const { handleSubmit, control, formState: { errors } } = useForm();
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const onSubmit = (data) => {
         const formDataToSend = new FormData();
-        for (const key in formData) {
-            formDataToSend.append(key, formData[key]);
-        }
+        Object.entries(data).forEach(([key, value]) => {
+            if (value) {
+                formDataToSend.append(key, value);
+            }
+        })
         props.loginAction(formDataToSend);
     };
 
+    const handleMouseDownPassword = event => {
+        event.preventDefault();
+    };
+
+
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit} className='d-flex d-column'>
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Username Or Email"
-                    onChange={handleInputChange}
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleInputChange}
-                />
-                <button type="submit" disabled={props.common_requesting}>Login</button>
-            </form>
-        </div>
+        <Grid container className="min-h-screen min-w-screen bg-bg_text_icon" >
+            <Grid item lg={7} md={7} sm={false} xs={false} className='bg-no-repeat bg-cover bg-center' sx={{ backgroundImage: `url(${tullab_icon})` }} />
+            <Grid item lg={5} md={5} sm={12} xs={12} className="text-main_text p-20 items-center flex justify-left">
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+                    <Grid container className="d-flex flex-column w-full gap-4">
+                        <h1 className="text-[50px]">Login</h1>
+                        <Controller
+                            name="username"
+                            control={control}
+                            defaultValue={''}
+                            render={({ field }) => (
+                                <CommonTextField
+                                    {...field}
+                                    variant="outlined"
+                                    fullWidth
+                                    ref={null}
+                                    title="Username or Email"
+                                    titleClassName="field_title"
+                                    sx={{ borderRadius: '10px' }}
+                                    error={Boolean(errors.username)}
+                                    helperText={Boolean(errors.username) ? errors.username.message : ""}
+                                    InputProps={{
+                                        style: { color: '#fff', borderRadius: '10px', border: `1px solid ${Boolean(errors.username) ? "#d32f2f" : "#fff"}`, },
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <AccountCircleIcon sx={{ width: '20px', color: '#fff' }} />
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                />
+                            )}
+                            rules={{
+                                required: 'Field is required!',
+                            }}
+                        />
+                        <Controller
+                            name="password"
+                            control={control}
+                            defaultValue={''}
+                            render={({ field }) => (
+                                <CommonTextField
+                                    {...field}
+                                    variant="outlined"
+                                    fullWidth
+                                    ref={null}
+                                    title="Password"
+                                    sx={{ borderRadius: '10px' }}
+                                    titleClassName="field_title"
+                                    error={Boolean(errors.password)}
+                                    helperText={Boolean(errors.password) ? errors.password.message : ''}
+                                    type={showPassword ? 'text' : 'password'}
+                                    InputProps={{
+                                        style: { color: '#fff', borderRadius: '10px', border: `1px solid ${Boolean(errors.password) ? "#d32f2f" : "#fff"}`, },
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <PasswordIcon sx={{ width: '20px', color: '#fff' }} />
+                                            </InputAdornment>
+                                        ),
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle passwoSrd visibility"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                    edge="end">
+                                                    {showPassword ? (
+                                                        <VisibilityOffIcon sx={{ color: '#fff' }} />
+                                                    ) : (
+                                                        <VisibilityIcon sx={{ color: '#fff' }} />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                />
+                            )}
+                            rules={{
+                                required: 'Password is required!',
+                                minLength: { value: 8, message: 'Length more than 8' }
+                            }}
+                        />
+                        <CommonLoadingButton className="mt-2 h-[60px] rounded-[10px]" title={"Login"} disabled={props.common_requesting} loading={props.common_requesting} />
+                    </Grid>
+
+                </form>
+            </Grid>
+
+        </Grid>
     );
 };
 const mapStateToProps = state => ({
