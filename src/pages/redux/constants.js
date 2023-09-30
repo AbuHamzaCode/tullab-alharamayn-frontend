@@ -1,5 +1,7 @@
 
 export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const USER_DATA = "USER_DATA";
 export const COMMON_ERROR = "COMMON_ERROR"
 export const COMMON_SUCCESS = "COMMON_SUCCESS"

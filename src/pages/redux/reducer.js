@@ -1,4 +1,6 @@
-import { COMMON_VALIDATION_ERROR, COMMON_ERROR, COMMON_REQUEST, COMMON_SUCCESS, LOGIN, USER_DATA } from "./constants";
+import Cookies from "js-cookie";
+import { COMMON_VALIDATION_ERROR, COMMON_ERROR, COMMON_REQUEST, COMMON_SUCCESS, LOGIN, USER_DATA, LOGOUT_SUCCESS } from "./constants";
+import storage from 'redux-persist/lib/storage';
 
 
 const initialState = {
@@ -42,6 +44,13 @@ const mainReducer = (state = initialState, action) => {
             return {
                 ...state,
                 common_requesting: true,
+            };
+        case LOGOUT_SUCCESS:
+            storage.removeItem('persist:tullab');
+            Cookies.remove('twj');
+            return {
+                ...state,
+                ...initialState,
             };
         case USER_DATA:
             return {

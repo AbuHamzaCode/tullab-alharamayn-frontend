@@ -1,8 +1,15 @@
-import { COMMON_VALIDATION_ERROR, COMMON_ERROR, COMMON_REQUEST, COMMON_SUCCESS, LOGIN, USER_DATA } from "./constants";
+import { COMMON_VALIDATION_ERROR, COMMON_ERROR, COMMON_REQUEST, COMMON_SUCCESS, LOGIN, USER_DATA, LOGOUT, LOGOUT_SUCCESS } from "./constants";
 
 export const loginAction = (body) => ({
     type: LOGIN,
     body
+});
+export const logoutAction = (token) => ({
+    type: LOGOUT,
+    token
+});
+export const logoutSuccessAction = () => ({
+    type: LOGOUT_SUCCESS
 });
 
 export const userDataAction = (data) => ({

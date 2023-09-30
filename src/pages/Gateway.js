@@ -1,51 +1,39 @@
-import React, { lazy, useLayoutEffect } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom';
-import PrivateRoutes from '../config/PrivateRoutes';
-import Cookies from 'js-cookie';
+import React, { lazy } from 'react'
+import { Outlet, Route, Routes } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { connect } from 'react-redux';
 
 const Login = lazy(() => import("../pages/login/Login"));
-const Users = lazy(() => import("../pages/user/Users"));
+const Lessons = lazy(() => import("../pages/user/Lessons"));
+// const Login =
+//     lazy(() => {
+//         return Promise.all([
+//             import("../pages/login/Login"),
+//             new Promise(resolve => setTimeout(resolve, 2000))
+//         ])
+//             .then(([moduleExports]) => moduleExports);
+//     });
 
-const privateRoutesData = [
-    {
-        path: '/login',
-        element: <Login />,
-        isDisabled: false,
-        exact: true,
-        isAuthorization: true,
-        isPrivate: true
-    },
-    {
-        path: '/',
-        element: <Users />,
-        isDisabled: false,
-        exact: true,
-        isAuthorization: true,
-        isPrivate: true
-    },
-]
+
 const Gateway = (props) => {
 
-    // useLayoutEffect(() => {
-    //     if (window.location.pathname === "/") {
-    //         if (!token) {
-    //             window.location.replace('/login')
-    //         } else {
-    //             window.location.replace('/')
-    //         }
-    //     }
-    // }, [window])
+    const routesData = [
+        {
+            path: '/auth',
+            element: <Login />,
+            isAlreadyLogged: props.isLogged
+        },
+        {
+            path: '/',
+            element: <Lessons />,
+        },
+    ]
 
     return (
         <Routes>
-            <Route exact path="/login" element={props?.isLogged ? <Navigate to="/" replace /> : <Login />} />
-            <Route element={<PrivateRoutes />}>
-                {
-                    privateRoutesData
-                        .filter(item => item.isAuthorization)
-                        .map((val, key) => <Route key={key} exact path={val?.path} element={val?.element} />)
+            <Route element={<Outlet />}>
+                {routesData.filter(el => !el?.isAlreadyLogged)
+                    .map((val, key) => <Route key={key} exact path={val?.path} element={val?.element} />)
                 }
             </Route>
             <Route exact path="*" element={<Loader />} />
