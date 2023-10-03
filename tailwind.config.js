@@ -12,7 +12,7 @@ module.exports = {
     extend: {
       colors: {
         bg_text_icon: "#020202",
-        main_text: "#fff",
+        main_text: "#fdce1c",
         input_color: "#efefef8a",
       },
       // screens: {

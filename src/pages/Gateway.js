@@ -4,7 +4,9 @@ import Loader from '../components/Loader';
 import { connect } from 'react-redux';
 
 const Login = lazy(() => import("../pages/login/Login"));
-const Lessons = lazy(() => import("../pages/user/Lessons"));
+const Lessons = lazy(() => import("../pages/lessons/Lessons"));
+const Playlist = lazy(() => import("../pages/playlist/Playlist"));
+const Authors = lazy(() => import("../pages/authors/Authors"));
 // const Login =
 //     lazy(() => {
 //         return Promise.all([
@@ -26,6 +28,14 @@ const Gateway = (props) => {
         {
             path: '/',
             element: <Lessons />,
+        },
+        {
+            path: '/playlist',
+            element: <Playlist />,
+        },
+        {
+            path: '/authors',
+            element: <Authors />,
         },
     ]
 

@@ -11,7 +11,9 @@ const Main = (props) => {
 
     return (
         <Grid className="relative flex min-w-screen
-         min-h-screen bg-black">
+         min-h-screen" sx={{
+                background: "linear-gradient(90deg, rgba(32,32,33,1) 0%, rgba(0,0,0,1) 100%, rgba(0,212,255,1) 100%)"
+            }}>
             {window.location.pathname !== "/auth" && (
                 <>
                     {/* side bar */}

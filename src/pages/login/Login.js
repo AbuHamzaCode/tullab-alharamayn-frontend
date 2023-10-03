@@ -33,10 +33,10 @@ const Login = (props) => {
     return (
         <Grid container className="min-h-screen min-w-screen bg-bg_text_icon" >
             <Grid item lg={7} md={7} sm={false} xs={false} className='bg-no-repeat bg-cover bg-center' sx={{ backgroundImage: `url(${tullab_icon})` }} />
-            <Grid item lg={5} md={5} sm={12} xs={12} className="text-main_text p-20 items-center flex justify-left">
+            <Grid item lg={5} md={5} sm={12} xs={12} className="text-[#fff] p-20 items-center flex justify-left">
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                     <Grid container className="d-flex flex-column w-full gap-4">
-                        <h1 className="text-[50px]">Login</h1>
+                        <h1 className="text-[50px] text-main_text">Login</h1>
                         <Controller
                             name="username"
                             control={control}
@@ -112,7 +112,7 @@ const Login = (props) => {
                                 minLength: { value: 8, message: 'Length more than 8' }
                             }}
                         />
-                        <CommonLoadingButton className="mt-2 h-[60px] rounded-[10px]" title={"Login"} disabled={props.common_requesting} loading={props.common_requesting} />
+                        <CommonLoadingButton className="mt-2 h-[60px] rounded-[10px] text-[22px]" title={"Login"} disabled={props.common_requesting} loading={props.common_requesting} />
                     </Grid>
 
                 </form>

@@ -6,7 +6,7 @@ import VideocamIcon from '@mui/icons-material/Videocam';
 import { connect } from 'react-redux';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Settings, Logout } from '@mui/icons-material';
+import { Settings, Logout, Login } from '@mui/icons-material';
 import { logoutAction } from '../pages/redux/actions';
 import Cookies from 'js-cookie';
 
@@ -57,16 +57,18 @@ const Navbar = (props) => {
                 <Grid className="flex rounded-[50px] p-1 items-center justify-center bg-[#9557ff]">
                     <VideocamIcon />
                 </Grid>
-                <span className="text-main_text text-[14px]">Start Stream</span>
+                <span className="text-[#fff] text-[14px]">Stream</span>
             </Grid>
             {/* current user */}
             <Grid className="bg-transparent flex gap-4 text-main_text items-center ">
                 <Avatar alt="user" src="" />
-                <Grid className="flex flex-col ">
-                    <span className="text-[15px]">{props.user?.fullName}</span>
-                    <small className="text-[13px] text-[orange]">{props.user?.isAdmin ? "Admin" : ""}</small>
-                </Grid>
-                <IconButton onClick={(event) => setUserMenu(event.currentTarget)} className="text-main_text hover:bg-[#dddddd]">
+                {props.user && (
+                    <Grid className="flex flex-col">
+                        <span className="text-[15px]">{props.user.fullName}</span>
+                        <small className="text-[13px] text-[#fff]">{props.user.isAdmin ? "Admin" : ""}</small>
+                    </Grid>
+                )}
+                <IconButton onClick={(event) => setUserMenu(event.currentTarget)} className="text-[#fff] hover:bg-[#949494]">
                     {userMenu ?
                         <ArrowDropUpIcon /> : <ArrowDropDownIcon />
                     }
@@ -116,12 +118,21 @@ const Navbar = (props) => {
                     </ListItemIcon>
                     Setting
                 </MenuItem>
-                <MenuItem onClick={() => [props.logoutAction(Cookies.get("twj")), setUserMenu(null)]}>
-                    <ListItemIcon>
-                        <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                </MenuItem>
+                {props.user ? (
+                    <MenuItem onClick={() => [props.logoutAction(Cookies.get("twj")), setUserMenu(null)]}>
+                        <ListItemIcon>
+                            <Logout fontSize="small" />
+                        </ListItemIcon>
+                        Logout
+                    </MenuItem>
+                ) : (
+                    <MenuItem onClick={() => [window.location.replace("/auth"), setUserMenu(null)]}>
+                        <ListItemIcon>
+                            <Login fontSize="small" />
+                        </ListItemIcon>
+                        Login
+                    </MenuItem>
+                )}
             </Menu>
 
         </div>
