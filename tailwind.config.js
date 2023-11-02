@@ -14,17 +14,8 @@ module.exports = {
         bg_text_icon: "#020202",
         main_text: "#fdce1c",
         input_color: "#efefef8a",
+        // player_bg: "rgb(51,144,236)",
       },
-      // screens: {
-      //   'tablet': '640px',
-      //   // => @media (min-width: 640px) { ... }
-
-      //   'laptop': '1024px',
-      //   // => @media (min-width: 1024px) { ... }
-
-      //   'desktop': '1280px',
-      //   // => @media (min-width: 1280px) { ... }
-      // },
     },
   },
 }

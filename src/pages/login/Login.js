@@ -48,7 +48,6 @@ const Login = (props) => {
                                     fullWidth
                                     ref={null}
                                     title="Username or Email"
-                                    titleClassName="field_title"
                                     sx={{ borderRadius: '10px' }}
                                     error={Boolean(errors.username)}
                                     helperText={Boolean(errors.username) ? errors.username.message : ""}
@@ -78,7 +77,6 @@ const Login = (props) => {
                                     ref={null}
                                     title="Password"
                                     sx={{ borderRadius: '10px' }}
-                                    titleClassName="field_title"
                                     error={Boolean(errors.password)}
                                     helperText={Boolean(errors.password) ? errors.password.message : ''}
                                     type={showPassword ? 'text' : 'password'}

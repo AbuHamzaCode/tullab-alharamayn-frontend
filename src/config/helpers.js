@@ -5,3 +5,5 @@ export const createBlobUrlFile = (files) => {
     });
     return { 'urlArray': imagesArray, filesArray: selectedFilesArray }
 };
+
+export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));

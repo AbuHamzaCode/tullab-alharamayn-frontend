@@ -9,7 +9,7 @@ export const CommonTextField = ({
 }) => {
 
     return (
-        <Grid className="flex flex-col w-full gap-2">
+        <Grid sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '10px' }}>
             {title && <span className={titleClassName} style={{ ...titleStyle }}>{title} {required && <span style={{ color: 'red' }}> &nbsp;*</span>}</span>}
             <TextField
                 size={size ?? 'large'} sx={{ ...sx, }}
@@ -29,7 +29,7 @@ export const CommonTextField = ({
 
 export const CommonLoadingButton = ({ title, disabled, loading, size, className }) => {
     return (
-        <LoadingButton className={`${className} bg-main_text text-bg_text_icon hover:bg-slate-200 w-full`} size={size ?? "large"} type="submit" disabled={disabled} loading={loading}>
+        <LoadingButton className="save_button" size={size ?? "large"} type="submit" disabled={disabled} loading={loading}>
             {title}
         </LoadingButton>
     )

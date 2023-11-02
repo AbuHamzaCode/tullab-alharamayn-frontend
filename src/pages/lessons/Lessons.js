@@ -1,110 +1,118 @@
-import { Box, Button, Grid, LinearProgress } from '@mui/material';
+import { Box, Button, Grid, IconButton, LinearProgress, SwipeableDrawer } from '@mui/material';
 import React, { Suspense, useRef, useState } from 'react';
 import Loader from '../../components/Loader';
-import PauseCircleFilledSharpIcon from '@mui/icons-material/PauseCircleFilledSharp';
-import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp';
 import { connect } from 'react-redux';
 import { lessonFileUploadAction } from './redux/actions';
 import Cookies from 'js-cookie';
 import { LESSON } from '../../config/constants';
+import { postLessonFileUpload } from '../../services/lesson.service';
+import { sleep } from '../../config/helpers';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import LessonForm from './content/LessonForm';
+
+const demoLessons = [
+  {
+    id: 1,
+    title: "Lesson 1 - Akyda",
+    thumbnail: "",
+    description: "lesson description here....",
+    filePath: "http://localhost:8080/uploaded_audios/ТАКФИР_ПО_ДАРУ_ОТВЕТ_ТАКФИРИТАМ_2_часть.mp3",
+  },
+  {
+    id: 2,
+    title: "Lesson 2 - Akyda",
+    thumbnail: "",
+    description: "lesson description here....",
+    filePath: "http://localhost:8080/uploaded_audios/ТАКФИР_ПО_ДАРУ_ОТВЕТ_ТАКФИРИТАМ_2_часть.mp3",
+  },
+  {
+    id: 3,
+    title: "Lesson 3 - Akyda",
+    thumbnail: "",
+    description: "lesson description here....",
+    filePath: "http://localhost:8080/uploaded_audios/ТАКФИР_ПО_ДАРУ_ОТВЕТ_ТАКФИРИТАМ_2_часть.mp3",
+  },
+  {
+    id: 4,
+    title: "Lesson 4 - Akyda",
+    thumbnail: "",
+    description: "lesson description here....",
+    filePath: "http://localhost:8080/uploaded_audios/ТАКФИР_ПО_ДАРУ_ОТВЕТ_ТАКФИРИТАМ_2_часть.mp3",
+  },
+]
 
 const Lessons = (props) => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [status, setStatus] = useState("");
-  const [progress, setProgress] = useState(0);
-
-  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-  };
-
-  const handleFileUpload = () => {
-    if (!selectedFile) {
-      alert("Please select a file to upload.");
+  /**
+   *  Drawer handler
+   * @param {Boolean} action - open/close drawer 
+   * @returns press tab or shift focusing the item
+   */
+  const toggleDrawer = (action) => (event) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
       return;
     }
-
-    const chunkSize = 1 * 1024 * 1024; // 2MB (adjust based on your requirements)
-    const totalChunks = Math.ceil(selectedFile.size / chunkSize);
-    const chunkProgress = 100 / totalChunks;
-    let remainder;
-    let chunkNumber = 0;
-    let start = 0;
-    let end = 0;
-
-    const uploadNextChunk = async () => {
-      if (end <= selectedFile.size) {
-        const chunk = selectedFile.slice(start, end);
-        const formData = new FormData();
-        formData.append("file", chunk);
-        formData.append("chunkNumber", chunkNumber);
-        formData.append("totalChunks", totalChunks + 1);
-        formData.append("originalname", selectedFile.name);
-
-        fetch(`http://localhost:8080${LESSON}/file-upload`, {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => response.json())
-          .then(async (data) => {
-            console.log({ data });
-            const temp = `Chunk ${chunkNumber + 1
-              }/${totalChunks + 1} uploaded successfully`;
-            setStatus(temp);
-            setProgress(Number((chunkNumber + 1) * chunkProgress));
-            chunkNumber++;
-            start = end;
-            end = start + chunkSize;
-            if (end > selectedFile.size && !remainder) {
-              remainder = end - selectedFile.size;
-              end -= remainder;
-            }
-            await sleep(300);
-            uploadNextChunk();
-          })
-          .catch((error) => {
-            console.error("Error uploading chunk:", error);
-          });
-      } else {
-        setProgress(100);
-        setSelectedFile(null);
-        setStatus("File upload completed");
-      }
-    };
-
-    uploadNextChunk();
+    setIsDrawerOpen(action);
   };
 
-
-
   return (
-    <Grid className="ml-[320px] mt-[70px] w-full h-full text-main_text">
+    <Grid className="ml-[330px] mt-[100px] mr-[30px] w-full h-full text-main_text">
       <Suspense fallback={<Loader />}>
-        <div>
-          <h2>Resumable File Upload</h2>
-          <h3>{status}</h3>
-          {progress > 0 &&
-            <Box sx={{ width: '300px', mr: 1 }}>
-              <LinearProgress variant="determinate" value={progress} color='success' />
-            </Box>
-          }
-          <input type="file" onChange={handleFileChange} />
-          <Button onClick={handleFileUpload}>Upload File</Button>
-        </div>
-        {/* <Grid className="flex flex-col gap-5 w-1/3">
-          <input type="file" onChange={handleFileChange} />
-          <input
-            type="text"
-            placeholder="Enter filename (optional)"
-            value={filename}
-            onChange={(e) => setFilename(e.target.value)}
-          />
-          <button onClick={handleUpload}>Upload</button>
-        </Grid> */}
-        <h2>Lessons</h2>
+        <Grid container className="w-full flex-col">
+          {/* label and create button */}
+          <Grid item md={12} xs={12} className="flex justify-between">
+            <label className="text-[25px] font-bold">Lessons</label>
+            <Button onClick={toggleDrawer(true)}
+              className="bg-[#fff] rounded-[10px] text-bg_text_icon hover:bg-main_text px-4"
+              startIcon={<AddBoxIcon />}
+            >
+              Lesson
+            </Button>
+          </Grid>
+          {/* list of lesson */}
+          <Grid item md={12} xs={12} container className="w-full flex-col gap-3 mt-2">
+            {demoLessons.map((val, key) => (
+              <Grid key={key} className="flex w-full rounded-[10px] bg-[#fff] flex-col text-bg_text_icon p-5">
+                <Grid>
+                  {/* <IconButton onClick={() => { }}
+                    className="bg-player_bg text-white"
+                  >
+                    <PlayArrowIcon />
+                  </IconButton> */}
+
+                  <audio controls>
+                    <source src={val.filePath} type="audio/mp3" />
+                  </audio>
+
+                </Grid>
+                <span>{val.title}</span>
+
+              </Grid>
+            ))}
+          </Grid>
+          <SwipeableDrawer
+            anchor={"right"}
+            open={isDrawerOpen}
+            onClose={toggleDrawer(false)}
+            onOpen={toggleDrawer(true)}
+            PaperProps={{
+              sx: {
+                width: '450px', p: '20px',
+                background: "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(38,38,38,1) 100%, rgba(13,17,18,1) 100%)"
+              }
+            }}
+          >
+            <LessonForm />
+          </SwipeableDrawer>
+        </Grid>
+
+
       </Suspense>
     </Grid>
   );
@@ -121,74 +129,46 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Lessons);
 
 
-// const [file, setFile] = useState(null);
-//   const [filename, setFilename] = useState('');
-//   const chunkNumberRef = useRef(0);
-//   const totalChunksRef = useRef(0);
-
-//   const handleFileChange = (e) => {
-//     setFile(e.target.files[0]);
-//     totalChunksRef.current = 0;
-//     chunkNumberRef.current = 0;
-//     setFilename('');
-//   };
 
 
-//   const sendChunk = async (start, end) => {
-//     const chunk = file.slice(start, end);
-//     const reader = new FileReader();
-//     reader.readAsDataURL(chunk);
 
-//     return new Promise(async (resolve, reject) => {
-//       reader.onload = async (event) => {
-//         const chunkData = event.target.result;
-//         chunkNumberRef.current += 1;
 
-//         const formData = new FormData();
-//         formData.append('chunk', chunkData);
-//         formData.append('chunkNumber', chunkNumberRef.current);
-//         formData.append('totalChunks', totalChunksRef.current);
-//         formData.append('filename', filename || file.name);
-//         try {
-//           const response = await fetch(`http://localhost:8080${LESSON}/file-upload`, {
-//             method: 'POST',
-//             body: formData,
-//           });
+// function CustomAudioPlayer() {
+//   const audioRef = useRef(null);
+//   const [isPlaying, setIsPlaying] = useState(false);
 
-//           if (response.ok) {
-//             console.log(`Chunk ${chunkNumberRef.current} uploaded successfully`);
-//             if (chunkNumberRef.current === totalChunksRef.current) {
-//               console.log(`total chunks ${totalChunksRef.current}`);
-//             }
-//             resolve();
-//           } else {
-//             console.error('Error uploading chunk');
-//             reject();
-//           }
-//         } catch (error) {
-//           console.error('Error uploading chunk:', error);
-//           reject();
-//         }
-//       };
-//     });
-//   };
-
-//   const handleUpload = async () => {
-//     if (file) {
-//       const chunkSize = 1024 * 1024; // 1MB chunks (you can adjust this)
-//       const totalSize = file.size;
-//       const totalChunks = Math.ceil(totalSize / chunkSize);
-
-//       totalChunksRef.current = totalChunks;
-
-//       for (let start = 0; start < totalSize; start += chunkSize) {
-//         const end = Math.min(start + chunkSize, totalSize);
-//         await sendChunk(start, end);
-//         await sleep(500); // Add a delay if needed to prevent too many requests in a short time
-//       }
+//   const togglePlayback = () => {
+//     if (audioRef.current.paused) {
+//       audioRef.current.play();
+//       setIsPlaying(true);
+//     } else {
+//       audioRef.current.pause();
+//       setIsPlaying(false);
 //     }
 //   };
 
-//   const callback = (response) => {
-//     debugger
-//   }
+//   const adjustVolume = (delta) => {
+//     const newVolume = Math.min(Math.max(0, audioRef.current.volume + delta), 1);
+//     audioRef.current.volume = newVolume;
+//   };
+
+//   return (
+//     <div className="custom-audio-player">
+//       <audio ref={audioRef}>
+//         <source src="your-audio-file.mp3" type="audio/mp3" />
+//         Your browser does not support the audio element.
+//       </audio>
+//       <div className="custom-controls">
+//         <button onClick={togglePlayback}>
+//           {isPlaying ? 'Pause' : 'Play'}
+//         </button>
+//         <div>
+//           <button onClick={() => adjustVolume(0.1)}>Vol Up</button>
+//           <button onClick={() => adjustVolume(-0.1)}>Vol Down</button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default CustomAudioPlayer;

@@ -1,0 +1,14 @@
+
+.save_button{
+    margin-top: 10px;
+    height: 60px;
+    border-radius: 10px;
+    font-size: 22px;
+    background: #fdce1c;
+    color: #020202;
+    width: 100%;
+    
+    &:hover {
+        background: #aaa9a9;
+    }
+}

@@ -5,7 +5,7 @@ import { store, persistor } from './redux/store';
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { PersistGate } from 'redux-persist/integration/react';
 
-import './App.css';
+import './App.scss';
 import Main from './pages';
 
 const theme = createTheme({
